@@ -8,7 +8,7 @@ class MyApp : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        // ...
+
     }
 
     override fun attachBaseContext(base: Context?) {
