@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_home"
+    app:startDestination="@id/fragment_login">
+
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:label="Home"
+        android:name="com.shantanu.example.modelbasic.ui.feature.home.HomeFragment"
+        tools:layout="@layout/fragment_home">
+
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/fragment_login"
+        android:label="Label"
+        android:name="com.shantanu.example.modelbasic.ui.feature.login.LoginFragment"
+        tools:layout="@layout/fragment_login">
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/fragment_register"
+        android:label="Register"
+        android:name="com.shantanu.example.modelbasic.ui.feature.register.RegisterFragment"
+        tools:layout="@layout/fragment_register">
+    </fragment>
+
+</navigation>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.shantanu.example.modelbasic.ui.feature.login.LoginViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="15dp">
+
+        <ImageView
+            android:id="@+id/fragment_login_imageview_logo"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:src="@drawable/ic_home"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.2"/>
+
+        <TextView
+            android:id="@+id/fragment_login_textview_click_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click on icon to see animation"
+            android:textSize="15sp"
+            android:textColor="#4B99FB"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_login_imageview_logo"
+            android:layout_marginTop="20dp"/>
+
+
+        <EditText
+            android:id="@+id/fragment_login_edittext_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@={model.emailAddress}"
+            android:hint="Username or Email"
+            android:inputType="text"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:textSize="17sp"
+            android:drawableLeft="@drawable/ic_user_account"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_login_textview_click_icon" />
+
+        <EditText
+            android:id="@+id/fragment_login_edittext_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:hint="Password"
+            android:text="@={model.password}"
+            android:inputType="textPassword"
+            android:maxLength="20"
+            android:maxLines="1"
+            android:textSize="17sp"
+            android:drawableLeft="@drawable/ic_user_account"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_login_edittext_username" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/fragment_login_button_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Login"
+            android:onClick="@{(v) -> model.saveUser(model.emailAddress,model.password)}"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_login_edittext_password" />
+
+        <TextView
+            android:id="@+id/fragment_login_textview_go_to_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Not a member?Sign up"
+            android:textSize="15sp"
+            android:textColor="#4B99FB"
+            android:drawableRight="@drawable/ic_arrow_forward"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_login_button_login"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:id="@+id/fragment_login_textview_see_gift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome Gift"
+            android:textSize="15sp"
+            android:textColor="#4B99FB"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragment_login_textview_go_to_register"
+            android:layout_marginTop="20dp"/>
+        <ImageView
+            android:id="@+id/fragment_login_imageview_gift"
+            android:layout_width="320dp"
+            android:layout_height="320dp"
+            android:src="@drawable/ic_card_giftcard"
+            android:visibility="gone"
+            android:background="#ffffff"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

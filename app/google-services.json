@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "834007942722",
+    "firebase_url": "https://modelbasic-65f62.firebaseio.com",
+    "project_id": "modelbasic-65f62",
+    "storage_bucket": "modelbasic-65f62.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:834007942722:android:267c766dbdfd7280dccfdb",
+        "android_client_info": {
+          "package_name": "com.shantanu.example.modelbasic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "834007942722-n8ekj0vf58pnc12oi6k1tps72guadcnk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaDQ36qAEdnV7HkZ1HdBFDd36ZBK3Ix_4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "834007942722-n8ekj0vf58pnc12oi6k1tps72guadcnk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
