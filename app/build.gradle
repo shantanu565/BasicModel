@@ -59,6 +59,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.2.2'
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
 
+    //firebase auth
+    implementation 'com.firebaseui:firebase-ui-auth:5.0.0'
+
     implementation 'androidx.multidex:multidex:2.0.1'
 
 

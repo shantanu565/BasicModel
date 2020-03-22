@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/fragment_login"
-        android:label="Label"
+        android:label="Login"
         android:name="com.shantanu.example.modelbasic.ui.feature.login.LoginFragment"
         tools:layout="@layout/fragment_login">
     </fragment>
@@ -29,6 +29,13 @@
         android:label="Register"
         android:name="com.shantanu.example.modelbasic.ui.feature.register.RegisterFragment"
         tools:layout="@layout/fragment_register">
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_forget_password"
+        android:label="Forget Password"
+        android:name="com.shantanu.example.modelbasic.ui.feature.forget.ForgetPasswordFragment"
+        tools:layout="@layout/fragment_forget_password">
     </fragment>
 
 </navigation>

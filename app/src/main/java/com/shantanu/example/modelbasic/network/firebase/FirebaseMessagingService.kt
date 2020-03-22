@@ -21,35 +21,36 @@ class CustomFirebaseMessagingService : FirebaseMessagingService() {
 
             //Log.d("msg", "From: ${remoteMessage?.from}")
             // Check if message contains a notification payload.
-           // remoteMessage?.notification?.let {
-                Log.d("msg", "Message Notification Body: ${it.body}")
-                //Message Services handle notification
-              /* val notification = NotificationCompat.Builder(context)
-                    .setContentTitle(remoteMessage.from)
-                    .setContentText(it.body)
-                    .setSmallIcon(R.mipmap.ic_launcher)
-                    .build()
-                val manager = NotificationManagerCompat.from(context)
-                manager.notify(0, notification)*/
+            // remoteMessage?.notification?.let {
+            Log.d("msg", "Message Notification Body: ${it.body}")
+            //Message Services handle notification
+            /* val notification = NotificationCompat.Builder(context)
+                  .setContentTitle(remoteMessage.from)
+                  .setContentText(it.body)
+                  .setSmallIcon(R.mipmap.ic_launcher)
+                  .build()
+              val manager = NotificationManagerCompat.from(context)
+              manager.notify(0, notification)*/
 
 
-          //  }
-    }}
+            //  }
+        }
+    }
 
 
     override fun onNewToken(token: String) {
-       /* FirebaseInstanceId.getInstance().instanceId
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    //Log.w(TAG, "getInstanceId failed", task.exception)
-                    return@OnCompleteListener
-                }
+        /* FirebaseInstanceId.getInstance().instanceId
+             .addOnCompleteListener(OnCompleteListener { task ->
+                 if (!task.isSuccessful) {
+                     //Log.w(TAG, "getInstanceId failed", task.exception)
+                     return@OnCompleteListener
+                 }
 
-                // Get new Instance ID token
-                val token = task.result?.token
-                Log.v("token",token)
+                 // Get new Instance ID token
+                 val token = task.result?.token
+                 Log.v("token",token)
 
-            })*/
+             })*/
     }
 
 }

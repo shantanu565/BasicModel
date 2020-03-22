@@ -15,20 +15,20 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.shantanu.example.modelbasic.R
 import com.shantanu.example.modelbasic.databinding.FragmentHomeBinding
 import com.shantanu.example.modelbasic.databinding.FragmentLoginBinding
 import com.shantanu.example.modelbasic.ui.feature.login.LoginViewModel
-import com.shantanu.example.modelbasic.ui.feature.register.RegistrationViewModel
+import com.shantanu.example.modelbasic.ui.viewmodel.FirebaseBaseViewModel
 
 class HomeFragment : Fragment() {
-    private lateinit var model: HomeViewModel
+    private lateinit var model: FirebaseBaseViewModel
     private lateinit var binding: FragmentHomeBinding
     private val NOTIFICATION_CHANNEL_ID = "10001"
     private val default_notification_channel_id = "default"
-
 
 
     override fun onCreateView(
@@ -39,12 +39,20 @@ class HomeFragment : Fragment() {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_home, container, false
+
+
         )
-        model = ViewModelProviders.of(this)[HomeViewModel::class.java]
+        model = ViewModelProviders.of(this)[FirebaseBaseViewModel::class.java]
 
         binding.fragmentHomeButtonLocalNotification.setOnClickListener {
             sendNotification()
 
+        }
+
+        binding.fragmentHomeButtonLogout.setOnClickListener {
+            model.logout()
+            //findNavController().navigate(R.id.fragment_login)
+            findNavController().popBackStack(R.id.fragment_login, true)
         }
 
 
@@ -53,6 +61,7 @@ class HomeFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
 
         //for noti
         FirebaseInstanceId.getInstance().instanceId
@@ -66,42 +75,46 @@ class HomeFragment : Fragment() {
                 val token = task.result?.token
 
                 // Log and toast
-                val msg =  token
-                Log.v("fb",msg)
-                Log.d("token", msg)
+                val msg = token
+                Log.v("fb", msg)
                 Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
             })
 
+
     }
 
-    private fun sendNotification(){
-        val mBuilder: NotificationCompat.Builder= NotificationCompat.Builder(activity?.applicationContext!!,default_notification_channel_id )
-            .setSmallIcon(R.drawable. ic_launcher_foreground )
-            .setContentTitle( "New Notify" )
+    private fun sendNotification() {
+        val mBuilder: NotificationCompat.Builder = NotificationCompat.Builder(
+            activity?.applicationContext!!,
+            default_notification_channel_id
+        )
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("New Notify")
             //.setSound(sound)
-            .setContentText( "Hello! This is push notification" );
-        val mNotificationManager: NotificationManager = activity!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            .setContentText("Hello! This is push notification");
+        val mNotificationManager: NotificationManager =
+            activity!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         //getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        if (android.os.Build.VERSION. SDK_INT >= android.os.Build.VERSION_CODES. O ) {
-            /*AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setContentType(AudioAttributes. CONTENT_TYPE_SONIFICATION )
-                .setUsage(AudioAttributes. USAGE_ALARM )
-                .build() ;*/
-            val importance:Int = NotificationManager. IMPORTANCE_HIGH ;
-            val notificationChannel: NotificationChannel = NotificationChannel( NOTIFICATION_CHANNEL_ID , "NOTIFICATION_CHANNEL_NAME" , importance)
-            notificationChannel.enableLights( true )
-            notificationChannel.setLightColor(Color. RED )
-            notificationChannel.enableVibration( true )
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+            val importance: Int = NotificationManager.IMPORTANCE_HIGH;
+            val notificationChannel: NotificationChannel = NotificationChannel(
+                NOTIFICATION_CHANNEL_ID,
+                "NOTIFICATION_CHANNEL_NAME",
+                importance
+            )
+            notificationChannel.enableLights(true)
+            notificationChannel.setLightColor(Color.RED)
+            notificationChannel.enableVibration(true)
             //notificationChannel.setVibrationPattern( Long []{ 100 , 200 , 300 , 400 , 500 , 400 , 300 , 200 , 400 }) ;
             //notificationChannel.setSound(sound , audioAttributes) ;
-            mBuilder.setChannelId( NOTIFICATION_CHANNEL_ID )
+            mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
 
             mNotificationManager.createNotificationChannel(notificationChannel)
         }
 
-        mNotificationManager.notify(0,mBuilder.build())
-        //  mNotificationManager.notify(default_notification_channel_id, mBuilder.build()) ;
+        mNotificationManager.notify(0, mBuilder.build())
     }
 
 
