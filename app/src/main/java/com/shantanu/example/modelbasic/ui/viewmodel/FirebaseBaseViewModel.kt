@@ -8,38 +8,41 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.shantanu.example.modelbasic.network.data.local.User
 
 //Common ViewModel for application consisting of firebase methods
 class FirebaseBaseViewModel : ViewModel() {
-    private var userResponse = MutableLiveData<User>()
+   // private var userResponse = MutableLiveData<User>()
     private var firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    var query = MutableLiveData<String>()
+    var email = MutableLiveData<String>()
+    var successRegistration=MutableLiveData<Boolean>()
+    var successLogin=MutableLiveData<Boolean>()
+    //var successLogin=MutableLiveData<Boolean>()
+
+
 
     //firebase registration
-    fun registerUser(email: String, password: String) {
+    fun registerUser(email: String, password: String):LiveData<Boolean> {
         firebaseAuth!!
             .createUserWithEmailAndPassword(email!!, password!!)
 
             .addOnCompleteListener { task ->
-                // mProgressBar!!.hide()
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
+                    // Sign in success
                     Log.d("TAG", "createUserWithEmail:success")
                     val userId = firebaseAuth!!.currentUser!!.uid
                     Log.v("uid", userId)
-
-
-                    // verifyEmail();
+                    successRegistration.value=true
 
                     updateUserInfoAndUI()
                 } else {
-                    // If sign in fails, display a message to the user.
+                    successRegistration.value=false
                     Log.w("TAG", "createUserWithEmail:failure", task.exception)
-                    // Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
             }
+        return successRegistration
     }
 
     private fun updateUserInfoAndUI() {
@@ -50,7 +53,6 @@ class FirebaseBaseViewModel : ViewModel() {
 
                 } else {
                     Log.e("TAG", "sendEmailVerification", task.exception)
-                    //Toast.makeText(activity, "Failed to send verification email.", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -58,22 +60,25 @@ class FirebaseBaseViewModel : ViewModel() {
     }
 
     //firebase login
-    fun userLogin(email: String, password: String) {
+    fun userLogin(email: String, password: String) :LiveData<Boolean>{
 
         firebaseAuth!!.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 //mProgressBar!!.hide()
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with signed-in user's information
-                    // Log.d(TAG, "signInWithEmail:success")
+                    successLogin.value=true
                     Log.v("login", "login")
+                    val userId = firebaseAuth!!.currentUser!!.uid
                     //updateUI()
                 } else {
-                    // If sign in fails, display a message to the user.
-                    //Log.e(TAG, "signInWithEmail:failure", task.exception)
+                    successLogin.value=false
+                    Log.v("login", "login not")
+
+                    Log.e("error", "signInWithEmail:failure", task.exception)
                     //Toast.makeText(activity, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }
             }
+        return successLogin
 
     }
 
@@ -108,7 +113,7 @@ class FirebaseBaseViewModel : ViewModel() {
     }
 
     //Method for geeting the query
-    fun getUser(user: User): LiveData<User> {
+    /*fun getUser(user: User): LiveData<User> {
         getSearchFilters()
         return userResponse
     }
@@ -116,7 +121,7 @@ class FirebaseBaseViewModel : ViewModel() {
     fun forgetUser(email: String): LiveData<User> {
         userForgetPasword(email)
         return userResponse
-    }
+    }*/
 
 
     //firebase logout
@@ -126,7 +131,18 @@ class FirebaseBaseViewModel : ViewModel() {
 
 
     //firbase get current user id
-    fun currentUser() {
-        firebaseAuth.currentUser
+    fun currentUser(): FirebaseUser? {
+        var session=firebaseAuth.currentUser
+        return session
+    }
+
+    fun getDetail():String{
+        val detail="Firebase is a mobile and web application development platform developed by Firebase, Inc. in 2011, then acquired by Google in 2014. As of March 2020, the Firebase platform has 19 products, which are used more than 1.5 million apps including 9GAG."
+        return detail
+    }
+
+    fun getUserInfo():LiveData<String>{
+        email.value=firebaseAuth.currentUser?.email
+        return email
     }
 }

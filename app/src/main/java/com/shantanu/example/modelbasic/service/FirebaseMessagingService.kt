@@ -1,18 +1,14 @@
-package com.shantanu.example.modelbasic.network.firebase
+package com.shantanu.example.modelbasic.service
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.shantanu.example.modelbasic.R
 
-class CustomFirebaseMessagingService : FirebaseMessagingService() {
+class FirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+        super.onMessageReceived(remoteMessage)
         Log.d("msg", "From: ${remoteMessage?.from}")
         // Check if message contains a notification payload.
         remoteMessage?.notification?.let {
@@ -39,7 +35,7 @@ class CustomFirebaseMessagingService : FirebaseMessagingService() {
 
 
     override fun onNewToken(token: String) {
-        /* FirebaseInstanceId.getInstance().instanceId
+        FirebaseInstanceId.getInstance().instanceId
              .addOnCompleteListener(OnCompleteListener { task ->
                  if (!task.isSuccessful) {
                      //Log.w(TAG, "getInstanceId failed", task.exception)
@@ -50,7 +46,7 @@ class CustomFirebaseMessagingService : FirebaseMessagingService() {
                  val token = task.result?.token
                  Log.v("token",token)
 
-             })*/
+             })
     }
 
 }

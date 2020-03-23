@@ -10,8 +10,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
@@ -29,6 +31,7 @@ class LoginFragment : Fragment() {
     private lateinit var model: FirebaseBaseViewModel
     private lateinit var binding: FragmentLoginBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private var succesLogin:Boolean=true
 
 
     override fun onCreateView(
@@ -86,14 +89,6 @@ class LoginFragment : Fragment() {
             scaler()
         }
 
-        binding.fragmentLoginTextviewSeeGift.setOnClickListener {
-
-        }
-
-        binding.fragmentLoginTextviewSeeGift.setOnClickListener {
-            binding.fragmentLoginImageviewGift.visibility = View.VISIBLE
-            colorizer()
-        }
 
         return binding.root
     }
@@ -112,30 +107,78 @@ class LoginFragment : Fragment() {
 
     private fun userLogin() {
 
-        var email = binding.fragmentLoginEdittextUsername.text.toString()
+        var email = binding.fragmentLoginEdittextUsername.text.toString().trim()
         var pass = binding.fragmentLoginEdittextPassword.text.toString()
 
-        Helper.validateEmail(email)
-        Helper.validatePassword(pass)
+        var validateEmail= Helper.validateEmail(email)
+        var validatePassword= Helper.validatePassword(pass)
 
-        // model.userLogin(email,pass)
-        findNavController().navigate(R.id.fragment_home)
-        //findNavController().popBackStack(R.id.fragment_home,true)
+        if (validateEmail && validatePassword){
+            model.userLogin(email,pass).observe(this, Observer {
+                succesLogin=it
+                if (succesLogin){
+                    Toast.makeText(activity,succesLogin.toString(),Toast.LENGTH_SHORT).show()
+                    binding.fragmentLoginEdittextPassword.text.clear()
+                    binding.fragmentLoginEdittextUsername.text.clear()
+                    findNavController().navigate(R.id.fragment_home)
+                    findNavController().popBackStack()
+                    findNavController().navigateUp()
 
-        /*  firebaseAuth!!.signInWithEmailAndPassword(pass!!, email!!)
-              .addOnCompleteListener(activity!!) { task ->
-                  //mProgressBar!!.hide()
-                  if (task.isSuccessful) {
-                      // Sign in success, update UI with signed-in user's information
-                     // Log.d(TAG, "signInWithEmail:success")
-                      updateUI()
-                  } else {
-                      // If sign in fails, display a message to the user.
-                      //Log.e(TAG, "signInWithEmail:failure", task.exception)
-                      Toast.makeText(activity, "Authentication failed.",
-                          Toast.LENGTH_SHORT).show()
-                  }
-              }*/
+                }else{
+                    Toast.makeText(activity,"Login failed.Try again",Toast.LENGTH_SHORT).show()
+                    binding.fragmentLoginEdittextPassword.text.clear()
+                    binding.fragmentLoginEdittextUsername.text.clear()
+
+
+                }
+
+            })
+
+        }else if (validateEmail==false){
+            binding.fragmentLoginEdittextUsername.requestFocus()
+            binding.fragmentLoginEdittextUsername.text.clear()
+            binding.fragmentLoginEdittextUsername.setError("Please enter a valid email",resources.getDrawable(R.drawable.ic_arrow_back))
+
+
+        }else{
+            binding.fragmentLoginEdittextPassword.requestFocus()
+            binding.fragmentLoginEdittextPassword.text.clear()
+            binding.fragmentLoginEdittextPassword.setError("Password must contain 8 character",resources.getDrawable(R.drawable.ic_arrow_back))
+
+        }
+
+       /* if (validateEmail){
+            var validatePassword= Helper.validatePassword(pass)
+
+            if (validatePassword){
+                model.userLogin(email,pass).observe(this, Observer {
+                    succesLogin=it
+                    if (succesLogin){
+                        Toast.makeText(activity,succesLogin.toString(),Toast.LENGTH_SHORT).show()
+
+                    }else{
+                        Toast.makeText(activity,succesLogin.toString(),Toast.LENGTH_SHORT).show()
+
+                    }
+
+                })
+
+            }else{
+                binding.fragmentLoginEdittextPassword.requestFocus()
+                binding.fragmentLoginEdittextPassword.text.clear()
+                binding.fragmentLoginEdittextPassword.setError("Please enter a valid Password",resources.getDrawable(R.drawable.ic_arrow_back))
+
+
+            }
+        }else{
+            binding.fragmentLoginEdittextUsername.requestFocus()
+            binding.fragmentLoginEdittextUsername.text.clear()
+            binding.fragmentLoginEdittextUsername.setError("Please enter a valid email",resources.getDrawable(R.drawable.ic_arrow_back))
+        }*/
+
+
+
+        //findNavController().navigate(R.id.fragment_home)
 
     }
 
@@ -155,18 +198,6 @@ class LoginFragment : Fragment() {
         animator.start()
     }
 
-    private fun colorizer() {
-        var animator = ObjectAnimator.ofArgb(
-            binding.fragmentLoginImageviewGift.parent,
-            "backgroundColor", Color.WHITE, Color.BLUE, Color.RED, Color.WHITE
-        )
-        animator.setDuration(500)
-        animator.repeatCount = 3
-        animator.repeatMode = ObjectAnimator.REVERSE
-        //animator.disableViewDuringAnimation(bgColor)
-        animator.start()
-        binding.fragmentLoginImageviewGift.visibility = View.GONE
-    }
 
 
     fun observeViewModel(viewModel: LoginViewModel?) {
@@ -193,6 +224,18 @@ class LoginFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() { // Handle the back button event
+                    requireActivity().finish()
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
+    }
 
 }
 

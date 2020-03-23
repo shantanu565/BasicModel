@@ -6,14 +6,23 @@ import android.util.Log
 object Helper {
 
     fun validateEmail(email: String?): Boolean {
-        if (!email?.isEmpty()!! || android.util.Patterns.EMAIL_ADDRESS.matcher(email)?.matches()!!) {
+        if (email?.length!!<10){
             return false
-            Log.v("helper", "tre")
-        } else {
-            return false
-            Log.v("helper", "f")
-
         }
+
+        if (email?.isEmpty()){
+            return false
+        }
+
+        if (android.util.Patterns.EMAIL_ADDRESS.matcher(email)?.matches()!!) {
+
+            Log.v("helper", "tre")
+            return true
+
+        }else{
+            return false
+        }
+
 
     }
 

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,7 @@ class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var userData: MutableLiveData<User>
+    private var success:Boolean=false
 
 
     override fun onCreateView(
@@ -44,21 +46,46 @@ class RegisterFragment : Fragment() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        binding.fragmentRegisterationTextviewBackToLogin.setOnClickListener {
-            //findNavController().navigate(R.id.action_fragment_registeration_to_fragment_login)
-        }
 
         binding.fragmentRegisterationButtonRegister.setOnClickListener {
-            var name: String? = binding.fragmentRegisterationEdittextUsername.text.toString()
             var pass = binding.fragmentRegisterationEdittextPassword.text.toString()
             var email = binding.fragmentRegisterationEdittextEmail.text.toString()
 
-            Helper.validateEmail(email)
-            Helper.validateName(name)
-            Helper.validatePassword(pass)
+            var checkEmail= Helper.validateEmail(email)
+            var checkPassword=Helper.validatePassword(pass)
 
-            model.registerUser(email, pass)
+            if (checkEmail && checkPassword){
 
+                model.registerUser(email, pass).observe(this, Observer {
+                    success=it
+                    Log.v("rs",success.toString())
+                    if (success){
+                        Toast.makeText(activity,"Registration Successful"+" "+success.toString(),Toast.LENGTH_SHORT).show()
+                        Log.v("rs",success.toString())
+
+                    }else{
+                        Toast.makeText(activity,"Registration failed",Toast.LENGTH_SHORT).show()
+
+                        Log.v("rs",success.toString())
+
+                    }
+
+                })
+
+            }else if (!checkEmail){
+                binding.fragmentRegisterationEdittextEmail.requestFocus()
+                binding.fragmentRegisterationEdittextEmail.text.clear()
+                binding.fragmentRegisterationEdittextEmail.setError("Please enter a valid email",
+                    resources.getDrawable(R.drawable.ic_arrow_back))
+
+            }else{
+                binding.fragmentRegisterationEdittextPassword.requestFocus()
+                binding.fragmentRegisterationEdittextPassword.text.clear()
+                binding.fragmentRegisterationEdittextPassword.setError(
+                    "Password must contain minimum 8 character",
+                    resources.getDrawable(R.drawable.ic_arrow_back))
+
+            }
 
         }
 

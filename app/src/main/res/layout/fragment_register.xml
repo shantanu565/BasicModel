@@ -30,21 +30,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.2" />
 
-            <EditText
-                android:id="@+id/fragment_registeration_edittext_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:drawableLeft="@drawable/ic_user_account"
-                android:hint="Username"
-                android:inputType="text"
-                android:maxLength="50"
-                android:maxLines="1"
-                android:textSize="17sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragment_registeration_imageview_logo" />
-
 
             <EditText
                 android:id="@+id/fragment_registeration_edittext_email"
@@ -59,7 +44,7 @@
                 android:textSize="17sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragment_registeration_edittext_username" />
+                app:layout_constraintTop_toBottomOf="@id/fragment_registeration_imageview_logo" />
 
             <EditText
                 android:id="@+id/fragment_registeration_edittext_password"
@@ -86,19 +71,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/fragment_registeration_edittext_password" />
-
-            <TextView
-                android:id="@+id/fragment_registeration_textview_back_to_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:drawableLeft="@drawable/ic_arrow_back"
-                android:text="Back to Login"
-                android:textColor="#4B99FB"
-                android:textSize="15sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/fragment_registeration_button_register" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -47,8 +47,9 @@ class ForgetPasswordFragment : Fragment() {
             Log.v("helper frag", check.toString())
 
             if (check) {
+                findNavController().popBackStack()
                 //model.userForgetPasword(email)
-                model.forgetUser(email)
+                //model.forgetUser(email)
 
 
             } else {
@@ -70,9 +71,6 @@ class ForgetPasswordFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        binding.fragmentForgetPasswordTextviewBackToLogin.setOnClickListener {
-            findNavController().navigate(R.id.fragment_login)
-        }
 
     }
 
