@@ -41,11 +41,13 @@ class HomeActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
         model = ViewModelProviders.of(this)[FirebaseBaseViewModel::class.java]
-        var userSession=model.currentUser()
-        Log.v("session",userSession.toString())
+
+        //checking if user is logged in or not
+        var userSession = model.currentUser()
+        Log.v("session", userSession.toString())
 
 
-        //here
+        //navigation graph & controller setup
         val navHost =
             supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment?
         navController = navHost!!.navController
@@ -53,7 +55,7 @@ class HomeActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
         val navInflater = navController.navInflater
         val graph = navInflater.inflate(R.navigation.nav_graph_home)
 
-        if (userSession?.email!=null) {
+        if (userSession?.email != null) {
             graph.startDestination = R.id.fragment_home
         } else {
             graph.startDestination = R.id.fragment_login
@@ -61,7 +63,7 @@ class HomeActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
 
         navController.graph = graph
 
-        var actionBar: ActionBar? =supportActionBar
+        var actionBar: ActionBar? = supportActionBar
         supportActionBar?.setDisplayHomeAsUpEnabled(true);
         NavigationUI.setupActionBarWithNavController(this, navController)
 
@@ -69,16 +71,8 @@ class HomeActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
             .setPopUpTo(R.id.fragment_login, true)
             .build()
 
-        //here
+        //navigation graph & controller setup
 
-
-       /* navController = Navigation.findNavController(this, R.id.nav_host)
-
-        // var actionBar: ActionBar? =supportActionBar
-        supportActionBar?.setDisplayHomeAsUpEnabled(true);
-        NavigationUI.setupActionBarWithNavController(this, navController)
-
-*/
         registerReceiver(
             ConnectivityReceiver(),
             IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
@@ -94,7 +88,7 @@ class HomeActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
     override fun onBackPressed() {
         super.onBackPressed()
 
-       // navController.popBackStack()
+        // navController.popBackStack()
     }
 
 
@@ -103,11 +97,12 @@ class HomeActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
 
     }
 
+    //Checking Internet Connectivity
     private fun showNetworkMessage(isConnected: Boolean) {
         if (!isConnected) {
-            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No Internet Connection", Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(this, "Internet Connected", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Internet Connected", Toast.LENGTH_LONG).show()
 
         }
     }
@@ -118,7 +113,7 @@ class HomeActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
         onNewToken()
     }
 
-    //here
+    //generating token each time firebase app will installed
     fun onNewToken() {
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
@@ -129,7 +124,7 @@ class HomeActivity : AppCompatActivity(), ConnectivityReceiver.ConnectivityRecei
 
                 // Get new Instance ID token
                 val token = task.result?.token
-                Log.v("token",token)
+                Log.v("token", token)
 
             })
     }

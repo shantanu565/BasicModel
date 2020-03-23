@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -24,9 +23,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.shantanu.example.modelbasic.R
 import com.shantanu.example.modelbasic.databinding.FragmentHomeBinding
-import com.shantanu.example.modelbasic.databinding.FragmentLoginBinding
-import com.shantanu.example.modelbasic.ui.feature.login.LoginFragment
-import com.shantanu.example.modelbasic.ui.feature.login.LoginViewModel
 import com.shantanu.example.modelbasic.ui.viewmodel.FirebaseBaseViewModel
 
 class HomeFragment : Fragment() {
@@ -55,37 +51,14 @@ class HomeFragment : Fragment() {
         }
 
         binding.fragmentHomeButtonLogout.setOnClickListener {
+            //logout user
             model.logout()
             findNavController().navigate(R.id.fragment_login)
             findNavController().popBackStack()
             findNavController().navigateUp()
+        }
 
-           // findNavController().popBackStack(R.id.nav_host,true)
-            /*findNavController().navigateUp()
-            if (!findNavController().popBackStack(R.id.nav_host,true)){
-
-               // findNavController().currentDestination?.removeAction(R.id.action_home_to_login)
-            }else{
-
-            }*/
-            //findNavController().popBackStack(R.id.nav_host,true)
-           /* findNavController().popBackStack()
-            if (!findNavController().popBackStack()) {
-                activity?.finish()
-            }*/
-
-
-
-          //  findNavController().navigate(R.id.fragment_login)
-           // findNavController().popBackStack()
-
-        //findNavController().popBackStack(R.id.fragment_login,true)
-        //findNavController().popBackStack(R.id.fragment_login, true)
-    }
-
-
-
-    return binding.root
+        return binding.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,7 +66,7 @@ class HomeFragment : Fragment() {
 
         val callback: OnBackPressedCallback =
             object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() { // Handle the back button event
+                override fun handleOnBackPressed() {
                     requireActivity().finish()
                 }
             }
@@ -105,12 +78,13 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        //obtaining loggedin user email id for welcome message
         model.getUserInfo().observe(this, Observer {
-            binding.fragmentHomeTextviewUserEmail.text="Hello "+it
+            binding.fragmentHomeTextviewUserEmail.text = "Hello " + it
         })
 
 
-        //for noti
+        //for notification token id
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -124,16 +98,17 @@ class HomeFragment : Fragment() {
                 // Log and toast
                 val msg = token
                 Log.v("fb", msg)
-                Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
             })
 
-        binding.fragmentHomeTextviewDetail.text=model.getDetail()
+        //setting firebase welcome details in textview
+        binding.fragmentHomeTextviewDetail.text = model.getDetail()
 
 
     }
 
 
-
+    //creating & sending notification
     private fun sendNotification() {
 
         val contentIntent = Intent(activity?.applicationContext, HomeActivity::class.java)
@@ -149,7 +124,6 @@ class HomeFragment : Fragment() {
         )
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("New Notify")
-            //.setSound(sound)
             .setContentIntent(contentPendingIntent)
             .setAutoCancel(true)
             .setContentText("Hello! This is push notification")
@@ -157,11 +131,6 @@ class HomeFragment : Fragment() {
 
         val mNotificationManager: NotificationManager =
             activity!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-        //intent
-
-
-        //getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 
@@ -174,8 +143,6 @@ class HomeFragment : Fragment() {
             notificationChannel.enableLights(true)
             notificationChannel.setLightColor(Color.RED)
             notificationChannel.enableVibration(true)
-            //notificationChannel.setVibrationPattern( Long []{ 100 , 200 , 300 , 400 , 500 , 400 , 300 , 200 , 400 }) ;
-            //notificationChannel.setSound(sound , audioAttributes) ;
             mBuilder.setChannelId(NOTIFICATION_CHANNEL_ID)
 
             mNotificationManager.createNotificationChannel(notificationChannel)

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +23,7 @@ class ForgetPasswordFragment : Fragment() {
     private lateinit var model: FirebaseBaseViewModel
     private lateinit var binding: FragmentForgetPasswordBinding
     private lateinit var firebaseAuth: FirebaseAuth
+    private var success: Boolean = false
 
 
     override fun onCreateView(
@@ -40,29 +42,6 @@ class ForgetPasswordFragment : Fragment() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        binding.fragmentForgetPasswordButtonRegister.setOnClickListener {
-            //userForgetPasword()
-            var email = binding.fragmentForgetPasswordEdittextEmail.text.toString()
-            var check = Helper.validateEmail(email)
-            Log.v("helper frag", check.toString())
-
-            if (check) {
-                findNavController().popBackStack()
-                //model.userForgetPasword(email)
-                //model.forgetUser(email)
-
-
-            } else {
-                binding.fragmentForgetPasswordEdittextEmail.requestFocus()
-                binding.fragmentForgetPasswordEdittextEmail.text.clear()
-                binding.fragmentForgetPasswordEdittextEmail.setError(
-                    "Please enter a valid email",
-                    resources.getDrawable(R.drawable.ic_arrow_back)
-                )
-            }
-
-
-        }
 
 
         return binding.root
@@ -71,33 +50,44 @@ class ForgetPasswordFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        //email validation for password reset
+        binding.fragmentForgetPasswordButtonRegister.setOnClickListener {
+            updatePassword()
+        }
+    }
+
+    //calling firebase method to reset password
+    private fun updatePassword() {
+        var email = binding.fragmentForgetPasswordEdittextEmail.text.toString()
+        var check = Helper.validateEmail(email)
+
+        if (check) {
+            model.userForgetPasword(email).observe(this, Observer {
+                success = it
+                if (success) {
+                    Toast.makeText(
+                        activity,
+                        "Change Successful. Please check your mail",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    findNavController().popBackStack()
+                } else {
+                    Toast.makeText(activity, "Email not found", Toast.LENGTH_SHORT).show()
+
+                }
+            })
+
+
+        } else {
+            binding.fragmentForgetPasswordEdittextEmail.requestFocus()
+            binding.fragmentForgetPasswordEdittextEmail.text.clear()
+            binding.fragmentForgetPasswordEdittextEmail.setError(
+                "Please enter a valid email",
+                resources.getDrawable(R.drawable.ic_arrow_back)
+            )
+        }
 
     }
 
-    /* private fun userForgetPasword(){
 
-         var email=binding.fragmentForgetPasswordEdittextEmail.text.toString()
-         if (!TextUtils.isEmpty(email)) {
-             firebaseAuth!!
-                 .sendPasswordResetEmail(email)
-                 .addOnCompleteListener { task ->
-                     if (task.isSuccessful) {
-                         val message = "Email sent."
- //                        Log.d(TAG, message)
-                         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
-                         updateUI()
-                     } else {
-   //                      Log.w(TAG, task.exception!!.message)
-                         Toast.makeText(activity, "No user found with this email.", Toast.LENGTH_SHORT).show()
-                     }
-                 }
-         } else {
-             Toast.makeText(activity, "Enter Email", Toast.LENGTH_SHORT).show()
-         }
-     }
-     }*/
-
-    private fun updateUI() {
-
-    }
 }

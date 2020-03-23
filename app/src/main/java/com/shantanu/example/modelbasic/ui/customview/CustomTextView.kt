@@ -9,7 +9,8 @@ import android.util.AttributeSet
 import android.widget.TextView
 import com.shantanu.example.modelbasic.R
 
-class CustomTextView(context: Context, attrs: AttributeSet) : androidx.appcompat.widget.AppCompatTextView(context, attrs) {
+class CustomTextView(context: Context, attrs: AttributeSet) :
+    androidx.appcompat.widget.AppCompatTextView(context, attrs) {
 
     private var typefaceType: Int = 0
     private var themeColoredText: Int = resources.getColor(R.color.colorPrimaryDark)

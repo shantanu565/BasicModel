@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 
+//Supporting Android MultiDexApplication as per need
 class MyApp : MultiDexApplication() {
 
     override fun onCreate() {
